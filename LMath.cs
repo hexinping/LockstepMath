@@ -59,10 +59,14 @@ namespace Lockstep.Math
             return new LFloat(true,(long) ((num6 + num2) * num) / 10);
         }
 
+        //反余弦表, 反余弦定义域为[-1,1],值域为[0,π]
         public static LFloat Acos(LFloat val)
         {
+            //转换区间 ==》 [0,1024]
+            //val._val 是放大倍数后的值
             int num = (int) (val._val * (long) LUTAcos.HALF_COUNT / LFloat.Precision) +
                       LUTAcos.HALF_COUNT;
+            //限制区间
             num = Clamp(num, 0, LUTAcos.COUNT);
             return new LFloat(true,(long) LUTAcos.table[num] / 10);
         }
@@ -75,6 +79,7 @@ namespace Lockstep.Math
             return new LFloat(true,(long) LUTAsin.table[num] / 10);
         }
 
+        // 传入的是弧度
         public static LFloat Sin(LFloat radians)
         {
             int index = LUTSinCos.getIndex(radians);

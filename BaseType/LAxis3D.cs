@@ -19,7 +19,8 @@ namespace Lockstep.Math
 
         public LVector3 WorldToLocal(LVector3 vec)
         {
-            var _x = Dot(x, vec);
+            //把一个向量的三个分量都投影到对应的轴上
+            var _x = Dot(x, vec); // 向量的点积也可以理解为一个向量在另一个向量的投影，这里可以理解为vec向量在x向量上的投影
             var _y = Dot(y, vec);
             var _z = Dot(z, vec);
             return new LVector3(_x, _y, _z);

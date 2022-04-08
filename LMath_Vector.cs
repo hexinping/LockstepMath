@@ -70,7 +70,7 @@ namespace Lockstep.Math
             return from + (to - from).Normalize(dt);
         }
 
-
+        //计算两个向量之间的夹角
         public static LFloat AngleInt(LVector3 lhs, LVector3 rhs)
         {
             return LMath.Acos(Dot(lhs, rhs));
