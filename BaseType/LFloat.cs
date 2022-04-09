@@ -4,11 +4,11 @@ using Lockstep.Math;
 namespace Lockstep.Math {
     [Serializable]
     public struct LFloat : IEquatable<LFloat>, IComparable<LFloat> {
-        public const int Precision = 1000;
+        public const int Precision = 1000; //放大1000倍
         public const int HalfPrecision = Precision / 2;
         public const float PrecisionFactor = 0.001f;
 
-        public int _val;
+        public int _val;  //放大倍数后的值，
 
         public static readonly LFloat zero = new LFloat(true,0);
         public static readonly LFloat one = new LFloat(true,LFloat.Precision);
@@ -87,12 +87,12 @@ namespace Lockstep.Math {
         }
 
         public static LFloat operator *(LFloat a, LFloat b){
-            long val = (long) (a._val) * b._val;
-            return new LFloat(true,(int) (val / 1000));
+            long val = (long) (a._val) * b._val; //因为_val已经是放大倍数后的值，两个_val相乘会导致最后结果被放大，所以需要最后除下
+            return new LFloat(true,(int) (val / 1000)); 
         }
 
         public static LFloat operator /(LFloat a, LFloat b){
-            long val = (long) (a._val * 1000) / b._val;
+            long val = (long) (a._val * 1000) / b._val; //因为_val已经是放大倍数后的值，两个_val相除会导致最后结果被缩小，所以需要最后乘下
             return new LFloat(true,(int) (val));
         }
 
@@ -102,7 +102,7 @@ namespace Lockstep.Math {
 
 
         #region adapt for int
-
+        // LFloat + int
         public static LFloat operator +(LFloat a, int b){
             return new LFloat(true,a._val + b * Precision);
         }
@@ -119,7 +119,7 @@ namespace Lockstep.Math {
             return new LFloat(true,(a._val) / b);
         }
 
-
+        // int + LFloat
         public static LFloat operator +(int a, LFloat b){
             return new LFloat(true,b._val + a * Precision);
         }
@@ -136,7 +136,7 @@ namespace Lockstep.Math {
             return new LFloat(true,(int) ((long) (a * Precision * Precision) / b._val));
         }
 
-
+        // LFloat < int
         public static bool operator <(LFloat a, int b){
             return a._val < (b * Precision);
         }
@@ -161,7 +161,7 @@ namespace Lockstep.Math {
             return a._val != (b * Precision);
         }
 
-
+        // int < LFloat
         public static bool operator <(int a, LFloat b){
             return (a * Precision) < (b._val);
         }
@@ -215,36 +215,38 @@ namespace Lockstep.Math {
         #endregion
 
         #region override type convert 
-
+        //显示转换 (LFloat) int
         public static explicit operator LFloat(int value){
             return new LFloat(true,value * Precision);
         }
 
+        //显示转换 (int) LFloat
         public static explicit operator int(LFloat value){
             return value._val / Precision;
         }
-
+        
+        //显示转换 (LFloat) long
         public static explicit operator LFloat(long value){
             return new LFloat(true,value * Precision);
         }
-
+        //显示转换 (long) LFloat
         public static explicit operator long(LFloat value){
             return value._val / Precision;
         }
 
-
+        //显示转换 (LFloat) float
         public static explicit operator LFloat(float value){
             return new LFloat(true,(long) (value * Precision));
         }
-
+        //显示转换 (float) LFloat
         public static explicit operator float(LFloat value){
             return (float) value._val * 0.001f;
         }
-
+        //显示转换 (LFloat) double
         public static explicit operator LFloat(double value){
             return new LFloat(true,(long) (value * Precision));
         }
-
+        //显示转换 (double) LFloat
         public static explicit operator double(LFloat value){
             return (double) value._val * 0.001;
         }

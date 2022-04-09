@@ -14,7 +14,7 @@ namespace Lockstep.Math {
             set { _y = value._val; }
         }
 
-        public int _x;
+        public int _x; //放大后的数
         public int _y;
         public static readonly LVector2 zero = new LVector2(true,0, 0);
         public static readonly LVector2 one = new LVector2(true,LFloat.Precision, LFloat.Precision);
@@ -24,6 +24,7 @@ namespace Lockstep.Math {
         public static readonly LVector2 right = new LVector2(true,LFloat.Precision, 0);
         public static readonly LVector2 left = new LVector2(true,-LFloat.Precision, 0);
 
+        //每4个值表示顺时针旋转90度的三角函数值
         private static readonly int[] Rotations = new int[] {
             1,
             0,
@@ -74,6 +75,21 @@ namespace Lockstep.Math {
         /// 1表示顺时针旋转 90 degree
         /// 2表示顺时针旋转 180 degree
         /// </summary>
+        /*
+            逆时针旋转矩阵
+            [cos@ -sin@] [vx]
+            [sin@ cos@]  [vy]
+
+            ==> vx_new = vx*cos@-vy*sin@
+            ==> vy_new = vx*sin@+vy*cos@
+
+            顺时针旋转矩阵  ，这里rotate使用的是这个旋转矩阵
+            [cos@ sin@] [vx]
+            [-sin@ cos@]  [vy]
+
+            ==> vx_new = vx*cos@+vy*sin@
+            ==> vy_new = -vx*sin@+vy*cos@
+        */
         public static LVector2 Rotate(LVector2 v, int r){
             r %= 4;
             return new LVector2(true,
@@ -108,7 +124,7 @@ namespace Lockstep.Math {
                 return;
             }
 
-            long b = (long) LMath.Sqrt(num3);
+            long b = (long) LMath.Sqrt(num3); //向量的模
             this._x = (int) (num * 1000L / b);
             this._y = (int) (num2 * 1000L / b);
         }
@@ -129,6 +145,7 @@ namespace Lockstep.Math {
             }
         }
 
+        //向量模大小
         public LFloat magnitude {
             get {
                 long num = (long) this._x;
